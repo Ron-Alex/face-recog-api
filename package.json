@@ -1,0 +1,23 @@
+{
+  "name": "facerecog-proxy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "cors": "^2.8.5",
+    "cors-anywhere": "^0.4.4",
+    "express": "^4.21.2",
+    "http-proxy-middleware": "^3.0.3",
+    "knex": "^3.1.0",
+    "pg": "^8.13.1"
+  }
+}
