@@ -4,6 +4,8 @@ const cors = require('cors')
 const knex = require('knex');
 const cors_proxy = require('cors-anywhere');
 
+const PORT = process.env.PORT
+
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
@@ -13,16 +15,16 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-var host = process.env.HOST || '0.0.0.0';
-var port = process.env.PORT || 8080;
+// var host = process.env.HOST || '0.0.0.0';
+// var port = process.env.PORT || 8080;
 
-cors_proxy.createServer({
-    originWhitelist: [], // Allow all origins
-    requireHeader: ['origin', 'x-requested-with'],
-    removeHeaders: ['cookie', 'cookie2']
-}).listen(port, host, function() {
-    console.log('Running CORS Anywhere on ' + host + ':' + port);
-});
+// cors_proxy.createServer({
+//     originWhitelist: [], // Allow all origins
+//     requireHeader: ['origin', 'x-requested-with'],
+//     removeHeaders: ['cookie', 'cookie2']
+// }).listen(port, host, function() {
+//     console.log('Running CORS Anywhere on ' + host + ':' + port);
+// });
 
 const db = knex({
     client: 'pg',
@@ -55,6 +57,6 @@ app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db)})
 
 app.put('/image', (req, res) => { image.handleImagePut(req, res, db)})
 
-app.listen(4000, () => {
-
+app.listen(process.env.PORT || 4000, () => {
+    console.log(`Server is running on port ${process.env.PORT}`)
 })
