@@ -36,7 +36,21 @@ const db = knex({
     }
 });
 
-app.get('clarifai', async (req, res) => {
+// const calculateFaceLocation = ({topRow, leftCol, bottomRow, rightCol}) => {
+
+//   const image = document.getElementById('inputImage');
+
+//   const width = Number(image.width);
+//   const height = Number(image.height);
+//   return {
+//       topRowpx: topRow * height,
+//       leftColpx: leftCol * width,
+//       bottomRowpx: height - (bottomRow * height),
+//       rightColpx: width - (rightCol * width)
+//   }
+// }
+
+app.put('/clarifai', async (req, res) => {
     const PAT = 'b7f5f05974764529ab113565cd90b500';
     const USER_ID = 'mljx0bi1jwgg';
     const APP_ID = 'my-first-application-klq8aa';
@@ -70,28 +84,10 @@ app.get('clarifai', async (req, res) => {
   
     fetch(`https://api.clarifai.com/v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`,requestOptions)
       .then((response) => response.json())
-      .then((result) => {
-        if(result) {
-            res.send(result);
-            console.log("Works");
-        }
-        const regions = result.outputs[0]?.data?.regions;
-        if (!regions) throw new Error('No regions found in the response.');
-  
-        const newBoxes = regions.map((region) => {
-          const boundingBox = region.region_info.bounding_box;
-  
-          return calculateFaceLocation({
-            topRow: boundingBox.top_row,
-            leftCol: boundingBox.left_col,
-            bottomRow: boundingBox.bottom_row,
-            rightCol: boundingBox.right_col,
-          });
-        });
-  
-        setBox(newBoxes); // Set state with the new bounding boxes (replacing old boxes)
+      .then(data => {
+        res.json(data)
       })
-      .catch((error) => console.log('error', error));
+      .catch(error => console.log('Error in clarifai endpoint', error));
 })
 
 app.get('/', (req, res) => { res.send('It works') })
